@@ -1,0 +1,324 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: MonthlyDigest 1.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-28 12:00+0000\n"
+"PO-Revision-Date: 2026-05-28 12:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: Russian\n"
+"Language: ru_RU\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+msgid "Monthly Ticket Digest"
+msgstr "Ежемесячный дайджест по заявкам"
+
+msgid "Monthly Digest"
+msgstr "Ежемесячный дайджест"
+
+msgid "How it works"
+msgstr "Как это работает"
+
+msgid "A daily CronTask runs and — on the configured day of month — queues a personal digest email for every active user that requested at least one ticket. The email contains summary counts (created / solved / closed / open) for the previous calendar month."
+msgstr "Ежедневный CronTask проверяет дату и в назначенный день месяца ставит в очередь персональное письмо-дайджест каждому активному пользователю, у которого была хотя бы одна заявка. Письмо содержит сводные счётчики (создано / решено / закрыто / открыто) за предыдущий календарный месяц."
+
+msgid "General"
+msgstr "Общие настройки"
+
+msgid "Enabled"
+msgstr "Включён"
+
+msgid "Master switch. Disable to pause all sends without losing config."
+msgstr "Главный переключатель. Выключи чтобы остановить все рассылки, сохранив настройки."
+
+msgid "Send day of month"
+msgstr "День месяца для отправки"
+
+msgid "1–28 (28 to avoid issues in February)"
+msgstr "1–28 (28 чтобы не было проблем с февралём)"
+
+msgid "Max users per cron run"
+msgstr "Макс. пользователей за один прогон cron"
+
+msgid "Set via the CronTask \"param\" field. Useful for throttling SMTP."
+msgstr "Задаётся через поле «param» CronTask. Помогает не перегружать SMTP."
+
+msgid "Configure under Setup → Automatic Actions"
+msgstr "Настраивается в Настройка → Автоматические действия"
+
+msgid "Subject template"
+msgstr "Шаблон темы письма"
+
+msgid "Use %s as period placeholder. Empty = default \"Your tickets — Month YYYY\"."
+msgstr "Используй %s как плейсхолдер периода. Пусто = по умолчанию «Ваши заявки — Месяц ГГГГ»."
+
+msgid "Audience"
+msgstr "Аудитория"
+
+msgid "Also send to users with zero activity"
+msgstr "Отправлять также пользователям без активности"
+
+msgid "By default we only mail users who created at least one ticket in the period. Enable to mail every active requester regardless."
+msgstr "По умолчанию письма уходят только тем, кто открыл хотя бы одну заявку за период. Включи чтобы отправлять всем активным requester-ам независимо от активности."
+
+msgid "Test mode"
+msgstr "Тестовый режим"
+
+msgid "Test mode enabled"
+msgstr "Тестовый режим включён"
+
+msgid "Redirects ALL outgoing digests to a single recipient — never enable in production."
+msgstr "Перенаправляет ВСЕ исходящие дайджесты на один указанный адрес — не включай на проде."
+
+msgid "Test recipient email"
+msgstr "Email тестового получателя"
+
+msgid "Actions"
+msgstr "Действия"
+
+msgid "Preview for me"
+msgstr "Превью для меня"
+
+msgid "Send test digest to me"
+msgstr "Прислать тестовый дайджест мне"
+
+msgid "Opted-out users"
+msgstr "Отписавшихся пользователей"
+
+msgid "Recent sends"
+msgstr "Недавние отправки"
+
+msgid "Date"
+msgstr "Дата"
+
+msgid "Period"
+msgstr "Период"
+
+msgid "User"
+msgstr "Пользователь"
+
+msgid "Status"
+msgstr "Статус"
+
+msgid "Recipient"
+msgstr "Получатель"
+
+msgid "Subject"
+msgstr "Тема"
+
+msgid "No digests sent yet."
+msgstr "Пока ни одного дайджеста не отправлено."
+
+msgid "Send monthly ticket digest emails"
+msgstr "Рассылка ежемесячных дайджестов по заявкам"
+
+msgid "Max users processed per run (0 = unlimited)"
+msgstr "Макс. пользователей за один прогон (0 = без лимита)"
+
+msgid "Digest preview"
+msgstr "Превью дайджеста"
+
+msgid "Test digest for %s: %s"
+msgstr "Тестовый дайджест за %s: %s"
+
+# === Email body ===
+msgid "Your monthly ticket digest"
+msgstr "Ваш ежемесячный дайджест по заявкам"
+
+msgid "Your ticket summary"
+msgstr "Сводка по вашим заявкам"
+
+msgid "Hello"
+msgstr "Здравствуйте"
+
+msgid "Here is a brief summary of your ticket activity for the last month."
+msgstr "Краткая сводка вашей активности по заявкам за прошлый месяц."
+
+msgid "Created"
+msgstr "Создано"
+
+msgid "Solved"
+msgstr "Решено"
+
+msgid "Closed"
+msgstr "Закрыто"
+
+msgid "Still open"
+msgstr "Ещё открыто"
+
+msgid "Open my tickets in GLPI"
+msgstr "Открыть мои заявки в GLPI"
+
+msgid "This is an automated message from your GLPI service desk."
+msgstr "Это автоматическое сообщение от вашей службы поддержки GLPI."
+
+msgid "Unsubscribe from monthly digests"
+msgstr "Отписаться от ежемесячных дайджестов"
+
+msgid "Unsubscribe"
+msgstr "Отписаться"
+
+msgid "Unsubscribed"
+msgstr "Вы отписаны"
+
+msgid "You will no longer receive monthly ticket digest emails."
+msgstr "Вы больше не будете получать ежемесячные дайджесты."
+
+msgid "Invalid or expired link"
+msgstr "Недействительная или просроченная ссылка"
+
+msgid "Please log in to GLPI and adjust your notification preferences manually."
+msgstr "Войдите в GLPI и измените настройки уведомлений вручную."
+
+msgid "Your tickets — %s"
+msgstr "Ваши заявки — %s"
+
+msgid "Monthly Digest settings saved."
+msgstr "Настройки ежемесячного дайджеста сохранены."
+
+msgid "Test recipient is not a valid email — saved blank."
+msgstr "Адрес тестового получателя некорректен — сохранён пустым."
+
+msgid "Test digest failed: %s"
+msgstr "Не удалось отправить тестовый дайджест: %s"
+
+msgid "You have read-only access to this configuration."
+msgstr "У вас доступ к настройкам только на чтение."
+
+msgid "Send a test digest to your own email now?"
+msgstr "Отправить тестовый дайджест на ваш email сейчас?"
+
+msgid "Digest period"
+msgstr "Период дайджеста"
+
+msgid "How many trailing months are summarised in each digest. 1 = previous month only; 3 = last 3 months combined."
+msgstr "Сколько прошедших месяцев суммируется в одном дайджесте. 1 = только прошлый месяц; 3 = последние 3 месяца вместе."
+
+msgid "1 month (previous)"
+msgstr "1 месяц (предыдущий)"
+
+msgid "2 months"
+msgstr "2 месяца"
+
+msgid "3 months"
+msgstr "3 месяца"
+
+# === Template editor ===
+msgid "Email templates"
+msgstr "Шаблоны писем"
+
+msgid "Customise the email bodies sent to recipients. Empty body resets to the shipped default. Twig syntax is validated before save."
+msgstr "Настройка тел писем, отправляемых получателям. Пустое тело сбрасывает шаблон на дефолт из файла. Синтаксис Twig проверяется перед сохранением."
+
+msgid "HTML body"
+msgstr "HTML-тело"
+
+msgid "Plain-text body"
+msgstr "Plain-text тело"
+
+msgid "Customised"
+msgstr "Изменён"
+
+msgid "Default (file)"
+msgstr "Дефолт (из файла)"
+
+msgid "Edit"
+msgstr "Редактировать"
+
+msgid "Template body"
+msgstr "Тело шаблона"
+
+msgid "Twig syntax. Leave empty and save to reset to the shipped default."
+msgstr "Синтаксис Twig. Оставь пустым и сохрани — сбросится на дефолт из файла."
+
+msgid "Back to settings"
+msgstr "Назад в настройки"
+
+msgid "A custom body is stored in the database."
+msgstr "Кастомное тело хранится в базе данных."
+
+msgid "Reads the file shipped with the plugin."
+msgstr "Читает файл из поставки плагина."
+
+msgid "Twig syntax error"
+msgstr "Ошибка синтаксиса Twig"
+
+msgid "Reset to default"
+msgstr "Сбросить на дефолт"
+
+msgid "Reset this template to its shipped default? Your customisations will be lost."
+msgstr "Сбросить этот шаблон на дефолт из файла? Все правки будут потеряны."
+
+msgid "Preview"
+msgstr "Превью"
+
+msgid "Available variables"
+msgstr "Доступные переменные"
+
+msgid "Variable"
+msgstr "Переменная"
+
+msgid "Description"
+msgstr "Описание"
+
+msgid "Template saved."
+msgstr "Шаблон сохранён."
+
+msgid "Template reset to shipped default."
+msgstr "Шаблон сброшен на дефолт из файла."
+
+msgid "Failed to save template."
+msgstr "Не удалось сохранить шаблон."
+
+msgid "Template not saved due to syntax error."
+msgstr "Шаблон не сохранён — ошибка синтаксиса."
+
+msgid "Unknown template key."
+msgstr "Неизвестный ключ шаблона."
+
+msgid "Recipient user id"
+msgstr "ID пользователя-получателя"
+
+msgid "Display name (firstname + realname or login)"
+msgstr "Отображаемое имя (firstname + realname или логин)"
+
+msgid "First name"
+msgstr "Имя"
+
+msgid "Surname"
+msgstr "Фамилия"
+
+msgid "Localised period label (e.g. \"April 2026\" or \"Mar–Apr 2026\")"
+msgstr "Локализованная подпись периода (напр. «апрель 2026» или «март–апрель 2026»)"
+
+msgid "Tickets created in period"
+msgstr "Заявок создано за период"
+
+msgid "Tickets solved in period"
+msgstr "Заявок решено за период"
+
+msgid "Tickets closed in period"
+msgstr "Заявок закрыто за период"
+
+msgid "Tickets still open at period end"
+msgstr "Заявок ещё открытых на конец периода"
+
+msgid "YYYY-MM key of period start month"
+msgstr "YYYY-MM ключ первого месяца окна"
+
+msgid "Window size (1, 2 or 3 months)"
+msgstr "Размер окна (1, 2 или 3 месяца)"
+
+msgid "Configured base URL of the GLPI instance"
+msgstr "Настроенный базовый URL GLPI-инстанса"
+
+msgid "Tokenised opt-out URL for the recipient"
+msgstr "Уникальный URL отписки для получателя"
+
+msgid "User's GLPI language code (e.g. \"ru_RU\")"
+msgstr "Языковой код пользователя в GLPI (напр. «ru_RU»)"
+
+msgid "Translate a string using the plugin's message catalogue"
+msgstr "Перевод строки через каталог сообщений плагина"

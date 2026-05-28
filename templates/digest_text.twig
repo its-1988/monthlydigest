@@ -1,0 +1,21 @@
+{# MonthlyDigest plugin — Email plain-text body. GPLv2+ #}
+{{ __('Your ticket summary', 'monthlydigest') }} — {{ period_label }}
+==============================================
+
+{{ __('Hello', 'monthlydigest') }} {{ user.name }},
+
+{{ __('Here is a brief summary of your ticket activity for the last month.', 'monthlydigest') }}
+
+  {{ __('Created', 'monthlydigest') }}: {{ stats.created }}
+  {{ __('Solved', 'monthlydigest') }}:  {{ stats.solved }}
+  {{ __('Closed', 'monthlydigest') }}:  {{ stats.closed }}
+  {{ __('Still open', 'monthlydigest') }}: {{ stats.open }}
+
+{% if glpi_url %}
+{{ __('Open my tickets in GLPI', 'monthlydigest') }}:
+  {{ glpi_url }}/front/ticket.php
+
+{% endif %}
+--
+{{ __('This is an automated message from your GLPI service desk.', 'monthlydigest') }}
+{% if unsubscribe_url %}{{ __('Unsubscribe', 'monthlydigest') }}: {{ unsubscribe_url }}{% endif %}

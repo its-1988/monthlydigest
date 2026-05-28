@@ -1,0 +1,91 @@
+{#
+ # MonthlyDigest plugin — Edit single email template body.
+ # GPLv2+
+ #}
+
+<div class="card mb-3">
+   <div class="card-header d-flex align-items-center">
+      <i class="ti ti-mail-code me-2"></i>
+      <strong>{{ template_label }}</strong>
+      {% if is_customised %}
+         <span class="badge bg-warning ms-2" title="{{ __('A custom body is stored in the database.', 'monthlydigest') }}">
+            {{ __('Customised', 'monthlydigest') }}
+         </span>
+      {% else %}
+         <span class="badge bg-secondary ms-2" title="{{ __('Reads the file shipped with the plugin.', 'monthlydigest') }}">
+            {{ __('Default (file)', 'monthlydigest') }}
+         </span>
+      {% endif %}
+      <a href="{{ back_url }}" class="btn btn-sm btn-link ms-auto">
+         <i class="fas fa-arrow-left"></i> {{ __('Back to settings', 'monthlydigest') }}
+      </a>
+   </div>
+   <div class="card-body">
+
+      {% if validation_error %}
+         <div class="alert alert-danger">
+            <strong>{{ __('Twig syntax error', 'monthlydigest') }}:</strong>
+            <pre class="mb-0 small">{{ validation_error }}</pre>
+         </div>
+      {% endif %}
+
+      <form name="form" action="{{ update_url }}" method="post" data-track-changes="true">
+         <input type="hidden" name="_glpi_csrf_token" value="{{ csrf_token_value }}">
+         <input type="hidden" name="key" value="{{ key }}">
+
+         <div class="mb-3">
+            <label class="form-label">{{ __('Template body', 'monthlydigest') }}</label>
+            <div class="form-text">
+               {{ __('Twig syntax. Leave empty and save to reset to the shipped default.', 'monthlydigest') }}
+            </div>
+            <textarea name="body"
+                      class="form-control font-monospace"
+                      rows="22"
+                      style="font-size:13px;white-space:pre;">{{ body }}</textarea>
+         </div>
+
+         {% if can_update %}
+            <div class="d-flex flex-wrap gap-2">
+               <input type="submit" name="save" class="btn btn-primary"
+                      value="{{ _x('button', 'Save') }}">
+               <a class="btn btn-outline-info" href="{{ preview_url }}" target="_blank">
+                  <i class="fas fa-eye me-1"></i> {{ __('Preview', 'monthlydigest') }}
+               </a>
+               {% if is_customised %}
+                  <a class="btn btn-outline-danger ms-auto"
+                     href="{{ reset_url }}"
+                     onclick="return confirm('{{ __('Reset this template to its shipped default? Your customisations will be lost.', 'monthlydigest') }}');">
+                     <i class="fas fa-undo me-1"></i> {{ __('Reset to default', 'monthlydigest') }}
+                  </a>
+               {% endif %}
+            </div>
+         {% endif %}
+      </form>
+
+   </div>
+</div>
+
+{# === Available variables documentation === #}
+<div class="card">
+   <div class="card-header">
+      <i class="fas fa-list-ul me-1"></i> {{ __('Available variables', 'monthlydigest') }}
+   </div>
+   <div class="table-responsive">
+      <table class="table table-sm table-striped mb-0">
+         <thead>
+            <tr>
+               <th style="width:30%">{{ __('Variable', 'monthlydigest') }}</th>
+               <th>{{ __('Description', 'monthlydigest') }}</th>
+            </tr>
+         </thead>
+         <tbody>
+            {% for v in variables %}
+               <tr>
+                  <td class="font-monospace small">{% verbatim %}{{ {% endverbatim %} {{ v.name }} {% verbatim %} }}{% endverbatim %}</td>
+                  <td>{{ v.description }}</td>
+               </tr>
+            {% endfor %}
+         </tbody>
+      </table>
+   </div>
+</div>

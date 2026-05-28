@@ -1,0 +1,324 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: MonthlyDigest 1.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-28 12:00+0000\n"
+"PO-Revision-Date: 2026-05-28 12:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: English (United Kingdom)\n"
+"Language: en_GB\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Monthly Ticket Digest"
+msgstr "Monthly Ticket Digest"
+
+msgid "Monthly Digest"
+msgstr "Monthly Digest"
+
+msgid "How it works"
+msgstr "How it works"
+
+msgid "A daily CronTask runs and — on the configured day of month — queues a personal digest email for every active user that requested at least one ticket. The email contains summary counts (created / solved / closed / open) for the previous calendar month."
+msgstr "A daily CronTask runs and — on the configured day of month — queues a personal digest email for every active user that requested at least one ticket. The email contains summary counts (created / solved / closed / open) for the previous calendar month."
+
+msgid "General"
+msgstr "General"
+
+msgid "Enabled"
+msgstr "Enabled"
+
+msgid "Master switch. Disable to pause all sends without losing config."
+msgstr "Master switch. Disable to pause all sends without losing config."
+
+msgid "Send day of month"
+msgstr "Send day of month"
+
+msgid "1–28 (28 to avoid issues in February)"
+msgstr "1–28 (28 to avoid issues in February)"
+
+msgid "Max users per cron run"
+msgstr "Max users per cron run"
+
+msgid "Set via the CronTask \"param\" field. Useful for throttling SMTP."
+msgstr "Set via the CronTask \"param\" field. Useful for throttling SMTP."
+
+msgid "Configure under Setup → Automatic Actions"
+msgstr "Configure under Setup → Automatic Actions"
+
+msgid "Subject template"
+msgstr "Subject template"
+
+msgid "Use %s as period placeholder. Empty = default \"Your tickets — Month YYYY\"."
+msgstr "Use %s as period placeholder. Empty = default \"Your tickets — Month YYYY\"."
+
+msgid "Audience"
+msgstr "Audience"
+
+msgid "Also send to users with zero activity"
+msgstr "Also send to users with zero activity"
+
+msgid "By default we only mail users who created at least one ticket in the period. Enable to mail every active requester regardless."
+msgstr "By default we only mail users who created at least one ticket in the period. Enable to mail every active requester regardless."
+
+msgid "Test mode"
+msgstr "Test mode"
+
+msgid "Test mode enabled"
+msgstr "Test mode enabled"
+
+msgid "Redirects ALL outgoing digests to a single recipient — never enable in production."
+msgstr "Redirects ALL outgoing digests to a single recipient — never enable in production."
+
+msgid "Test recipient email"
+msgstr "Test recipient email"
+
+msgid "Actions"
+msgstr "Actions"
+
+msgid "Preview for me"
+msgstr "Preview for me"
+
+msgid "Send test digest to me"
+msgstr "Send test digest to me"
+
+msgid "Opted-out users"
+msgstr "Opted-out users"
+
+msgid "Recent sends"
+msgstr "Recent sends"
+
+msgid "Date"
+msgstr "Date"
+
+msgid "Period"
+msgstr "Period"
+
+msgid "User"
+msgstr "User"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Recipient"
+msgstr "Recipient"
+
+msgid "Subject"
+msgstr "Subject"
+
+msgid "No digests sent yet."
+msgstr "No digests sent yet."
+
+msgid "Send monthly ticket digest emails"
+msgstr "Send monthly ticket digest emails"
+
+msgid "Max users processed per run (0 = unlimited)"
+msgstr "Max users processed per run (0 = unlimited)"
+
+msgid "Digest preview"
+msgstr "Digest preview"
+
+msgid "Test digest for %s: %s"
+msgstr "Test digest for %s: %s"
+
+# === Email body ===
+msgid "Your monthly ticket digest"
+msgstr "Your monthly ticket digest"
+
+msgid "Your ticket summary"
+msgstr "Your ticket summary"
+
+msgid "Hello"
+msgstr "Hello"
+
+msgid "Here is a brief summary of your ticket activity for the last month."
+msgstr "Here is a brief summary of your ticket activity for the last month."
+
+msgid "Created"
+msgstr "Created"
+
+msgid "Solved"
+msgstr "Solved"
+
+msgid "Closed"
+msgstr "Closed"
+
+msgid "Still open"
+msgstr "Still open"
+
+msgid "Open my tickets in GLPI"
+msgstr "Open my tickets in GLPI"
+
+msgid "This is an automated message from your GLPI service desk."
+msgstr "This is an automated message from your GLPI service desk."
+
+msgid "Unsubscribe from monthly digests"
+msgstr "Unsubscribe from monthly digests"
+
+msgid "Unsubscribe"
+msgstr "Unsubscribe"
+
+msgid "Unsubscribed"
+msgstr "Unsubscribed"
+
+msgid "You will no longer receive monthly ticket digest emails."
+msgstr "You will no longer receive monthly ticket digest emails."
+
+msgid "Invalid or expired link"
+msgstr "Invalid or expired link"
+
+msgid "Please log in to GLPI and adjust your notification preferences manually."
+msgstr "Please log in to GLPI and adjust your notification preferences manually."
+
+msgid "Your tickets — %s"
+msgstr "Your tickets — %s"
+
+msgid "Monthly Digest settings saved."
+msgstr "Monthly Digest settings saved."
+
+msgid "Test recipient is not a valid email — saved blank."
+msgstr "Test recipient is not a valid email — saved blank."
+
+msgid "Test digest failed: %s"
+msgstr "Test digest failed: %s"
+
+msgid "You have read-only access to this configuration."
+msgstr "You have read-only access to this configuration."
+
+msgid "Send a test digest to your own email now?"
+msgstr "Send a test digest to your own email now?"
+
+msgid "Digest period"
+msgstr "Digest period"
+
+msgid "How many trailing months are summarised in each digest. 1 = previous month only; 3 = last 3 months combined."
+msgstr "How many trailing months are summarised in each digest. 1 = previous month only; 3 = last 3 months combined."
+
+msgid "1 month (previous)"
+msgstr "1 month (previous)"
+
+msgid "2 months"
+msgstr "2 months"
+
+msgid "3 months"
+msgstr "3 months"
+
+# === Template editor ===
+msgid "Email templates"
+msgstr "Email templates"
+
+msgid "Customise the email bodies sent to recipients. Empty body resets to the shipped default. Twig syntax is validated before save."
+msgstr "Customise the email bodies sent to recipients. Empty body resets to the shipped default. Twig syntax is validated before save."
+
+msgid "HTML body"
+msgstr "HTML body"
+
+msgid "Plain-text body"
+msgstr "Plain-text body"
+
+msgid "Customised"
+msgstr "Customised"
+
+msgid "Default (file)"
+msgstr "Default (file)"
+
+msgid "Edit"
+msgstr "Edit"
+
+msgid "Template body"
+msgstr "Template body"
+
+msgid "Twig syntax. Leave empty and save to reset to the shipped default."
+msgstr "Twig syntax. Leave empty and save to reset to the shipped default."
+
+msgid "Back to settings"
+msgstr "Back to settings"
+
+msgid "A custom body is stored in the database."
+msgstr "A custom body is stored in the database."
+
+msgid "Reads the file shipped with the plugin."
+msgstr "Reads the file shipped with the plugin."
+
+msgid "Twig syntax error"
+msgstr "Twig syntax error"
+
+msgid "Reset to default"
+msgstr "Reset to default"
+
+msgid "Reset this template to its shipped default? Your customisations will be lost."
+msgstr "Reset this template to its shipped default? Your customisations will be lost."
+
+msgid "Preview"
+msgstr "Preview"
+
+msgid "Available variables"
+msgstr "Available variables"
+
+msgid "Variable"
+msgstr "Variable"
+
+msgid "Description"
+msgstr "Description"
+
+msgid "Template saved."
+msgstr "Template saved."
+
+msgid "Template reset to shipped default."
+msgstr "Template reset to shipped default."
+
+msgid "Failed to save template."
+msgstr "Failed to save template."
+
+msgid "Template not saved due to syntax error."
+msgstr "Template not saved due to syntax error."
+
+msgid "Unknown template key."
+msgstr "Unknown template key."
+
+msgid "Recipient user id"
+msgstr "Recipient user id"
+
+msgid "Display name (firstname + realname or login)"
+msgstr "Display name (firstname + realname or login)"
+
+msgid "First name"
+msgstr "First name"
+
+msgid "Surname"
+msgstr "Surname"
+
+msgid "Localised period label (e.g. \"April 2026\" or \"Mar–Apr 2026\")"
+msgstr "Localised period label (e.g. \"April 2026\" or \"Mar–Apr 2026\")"
+
+msgid "Tickets created in period"
+msgstr "Tickets created in period"
+
+msgid "Tickets solved in period"
+msgstr "Tickets solved in period"
+
+msgid "Tickets closed in period"
+msgstr "Tickets closed in period"
+
+msgid "Tickets still open at period end"
+msgstr "Tickets still open at period end"
+
+msgid "YYYY-MM key of period start month"
+msgstr "YYYY-MM key of period start month"
+
+msgid "Window size (1, 2 or 3 months)"
+msgstr "Window size (1, 2 or 3 months)"
+
+msgid "Configured base URL of the GLPI instance"
+msgstr "Configured base URL of the GLPI instance"
+
+msgid "Tokenised opt-out URL for the recipient"
+msgstr "Tokenised opt-out URL for the recipient"
+
+msgid "User's GLPI language code (e.g. \"ru_RU\")"
+msgstr "User's GLPI language code (e.g. \"en_GB\")"
+
+msgid "Translate a string using the plugin's message catalogue"
+msgstr "Translate a string using the plugin's message catalogue"

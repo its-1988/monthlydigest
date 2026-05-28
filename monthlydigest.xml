@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+   <name>Monthly Ticket Digest</name>
+   <key>monthlydigest</key>
+   <state>stable</state>
+   <description>
+      <short>
+         <en><![CDATA[Monthly per-user digest of ticket activity (created / solved / closed / open) — queued via GLPI NotificationEvent.]]></en>
+         <ru><![CDATA[Ежемесячный персональный дайджест по заявкам пользователя (создано / решено / закрыто / открыто) через очередь GLPI.]]></ru>
+      </short>
+      <long>
+         <en><![CDATA[Sends a personal monthly summary email to every active user that requested at least one ticket. Uses GLPI's QueuedNotification for delivery (SMTP, retries, throttling). Configurable day of month, test-mode, opt-out via tokenised link, idempotent runs.]]></en>
+         <ru><![CDATA[Отправляет персональное письмо-сводку каждому активному пользователю, у которого была хотя бы одна заявка. Использует QueuedNotification GLPI (SMTP, повторы, throttling). Настраиваемый день месяца, тестовый режим, отписка по токену, идемпотентные прогоны.]]></ru>
+      </long>
+   </description>
+   <homepage></homepage>
+   <download></download>
+   <issues></issues>
+   <readme></readme>
+   <authors>
+      <author>Claude Code</author>
+   </authors>
+   <versions>
+      <version>
+         <num>1.0.0</num>
+         <compatibility>~11.0.0</compatibility>
+      </version>
+   </versions>
+   <langs>
+      <lang>en_GB</lang>
+      <lang>ru_RU</lang>
+   </langs>
+   <license><![CDATA[GPL v2+]]></license>
+   <tags>
+      <en>
+         <tag>Notifications</tag>
+         <tag>Digest</tag>
+         <tag>Statistics</tag>
+      </en>
+      <ru>
+         <tag>Уведомления</tag>
+         <tag>Дайджест</tag>
+         <tag>Статистика</tag>
+      </ru>
+   </tags>
+</root>
