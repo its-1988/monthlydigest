@@ -1,0 +1,202 @@
+{#
+ # MonthlyDigest plugin — Standalone settings form.
+ # GPLv2+
+ #
+ # The form posts to the STANDARD GLPI Config endpoint (/front/config.form.php).
+ # Config::prepareInputForUpdate (11.0.7 lines 174-189) recognises
+ # `config_context = "plugin:monthlydigest"` and routes the input to
+ # setConfigurationValues() automatically. CSRF is validated by the Symfony
+ # `CheckCsrfListener` and matches because the token in the form is the
+ # canonical csrf_token() from the same session.
+ #}
+
+{% macro select(name, choices, current) %}
+   <select name="{{ name }}" class="form-select">
+      {% for k, label in choices %}
+         <option value="{{ k }}" {% if current == k %}selected{% endif %}>{{ label }}</option>
+      {% endfor %}
+   </select>
+{% endmacro %}
+{% import _self as ui %}
+
+<form name="form" action="{{ form_action }}" method="post" data-track-changes="true">
+   {# CSRF: PHP-generated value (Twig csrf_token() returns empty in plugin context). #}
+   <input type="hidden" name="_glpi_csrf_token" value="{{ csrf_token_value }}">
+
+   <div class="card mb-3">
+      <div class="card-header d-flex align-items-center">
+         <i class="ti ti-calendar-stats me-2"></i>
+         <strong>{{ __('Monthly Ticket Digest', 'monthlydigest') }}</strong>
+         <span class="badge bg-secondary ms-auto" title="Plugin version">
+            v{{ plugin_version }}
+         </span>
+      </div>
+      <div class="card-body">
+         <div class="alert alert-info">
+            <strong>{{ __('How it works', 'monthlydigest') }}</strong><br>
+            {{ __('A daily CronTask runs and — on the configured day of month — queues a personal digest email for every active user that requested at least one ticket. The email contains summary counts (created / solved / closed / open) for the previous calendar month.', 'monthlydigest') }}
+         </div>
+
+         <h5 class="mt-3"><i class="fas fa-power-off me-1"></i> {{ __('General', 'monthlydigest') }}</h5>
+         <div class="row mb-3">
+            <label class="col-sm-4 col-form-label">{{ __('Enabled', 'monthlydigest') }}
+               <div class="form-text">{{ __('Master switch. Disable to pause all sends without losing config.', 'monthlydigest') }}</div>
+            </label>
+            <div class="col-sm-8 pt-2">{{ ui.select('enabled', yesno_choices, config.enabled) }}</div>
+         </div>
+         <div class="row mb-3">
+            <label class="col-sm-4 col-form-label">{{ __('Send day of month', 'monthlydigest') }}
+               <div class="form-text">{{ __('1–28 (28 to avoid issues in February)', 'monthlydigest') }}</div>
+            </label>
+            <div class="col-sm-8">
+               <input type="number" name="send_day_of_month" class="form-control" min="1" max="28" value="{{ config.send_day_of_month }}">
+            </div>
+         </div>
+         <div class="row mb-3">
+            <label class="col-sm-4 col-form-label">{{ __('Digest period', 'monthlydigest') }}
+               <div class="form-text">{{ __('How many trailing months are summarised in each digest. 1 = previous month only; 3 = last 3 months combined.', 'monthlydigest') }}</div>
+            </label>
+            <div class="col-sm-8">
+               {{ ui.select('period_months', period_choices, config.period_months) }}
+            </div>
+         </div>
+         <div class="row mb-3">
+            <label class="col-sm-4 col-form-label">{{ __('Subject template', 'monthlydigest') }}
+               <div class="form-text">{{ __('Use %s as period placeholder. Empty = default "Your tickets — Month YYYY".', 'monthlydigest') }}</div>
+            </label>
+            <div class="col-sm-8">
+               <input type="text" name="subject_template" class="form-control" placeholder="Your tickets — %s" value="{{ config.subject_template }}">
+            </div>
+         </div>
+
+         <h5 class="mt-4"><i class="fas fa-filter me-1"></i> {{ __('Audience', 'monthlydigest') }}</h5>
+         <div class="row mb-3">
+            <label class="col-sm-4 col-form-label">{{ __('Also send to users with zero activity', 'monthlydigest') }}
+               <div class="form-text">{{ __('By default we only mail users who created at least one ticket in the period. Enable to mail every active requester regardless.', 'monthlydigest') }}</div>
+            </label>
+            <div class="col-sm-8 pt-2">{{ ui.select('include_zero_users', yesno_choices, config.include_zero_users) }}</div>
+         </div>
+
+         <h5 class="mt-4"><i class="fas fa-flask me-1"></i> {{ __('Test mode', 'monthlydigest') }}</h5>
+         <div class="row mb-3">
+            <label class="col-sm-4 col-form-label">{{ __('Test mode enabled', 'monthlydigest') }}
+               <div class="form-text">{{ __('Redirects ALL outgoing digests to a single recipient — never enable in production.', 'monthlydigest') }}</div>
+            </label>
+            <div class="col-sm-8 pt-2">{{ ui.select('test_mode', yesno_choices, config.test_mode) }}</div>
+         </div>
+         <div class="row mb-3">
+            <label class="col-sm-4 col-form-label">{{ __('Test recipient email', 'monthlydigest') }}</label>
+            <div class="col-sm-8">
+               <input type="email" name="test_recipient" class="form-control" placeholder="admin@example.com" value="{{ config.test_recipient }}">
+            </div>
+         </div>
+
+         {% if can_update %}
+            <div class="d-flex justify-content-center mt-4">
+               <input type="submit" name="update" class="btn btn-primary"
+                      value="{{ _x('button', 'Save') }}">
+            </div>
+         {% else %}
+            <div class="alert alert-warning text-center mt-4 mb-0">
+               {{ __('You have read-only access to this configuration.', 'monthlydigest') }}
+            </div>
+         {% endif %}
+      </div>
+   </div>
+</form>
+
+{# === Email templates editor === #}
+<div class="card mb-3">
+   <div class="card-header">
+      <i class="fas fa-mail-bulk me-1"></i> {{ __('Email templates', 'monthlydigest') }}
+   </div>
+   <div class="card-body">
+      <p class="text-muted small mb-3">
+         {{ __('Customise the email bodies sent to recipients. Empty body resets to the shipped default. Twig syntax is validated before save.', 'monthlydigest') }}
+      </p>
+      <table class="table table-sm align-middle mb-0">
+         <tbody>
+            {% for t in templates %}
+               <tr>
+                  <td>
+                     <i class="ti ti-mail-code me-2"></i>
+                     <strong>{{ t.label }}</strong>
+                  </td>
+                  <td>
+                     {% if t.is_customised %}
+                        <span class="badge bg-warning">{{ __('Customised', 'monthlydigest') }}</span>
+                     {% else %}
+                        <span class="badge bg-secondary">{{ __('Default (file)', 'monthlydigest') }}</span>
+                     {% endif %}
+                  </td>
+                  <td class="text-end">
+                     <a class="btn btn-sm btn-outline-primary" href="{{ t.edit_url }}">
+                        <i class="fas fa-edit me-1"></i> {{ _x('button', 'Edit') }}
+                     </a>
+                  </td>
+               </tr>
+            {% endfor %}
+         </tbody>
+      </table>
+   </div>
+</div>
+
+{# Quick actions — `Send test` is a GET-link (idempotent state-changer with
+   admin rights check). The CheckCsrfListener skips GET requests entirely, so
+   we avoid the CSRF dance for this admin-only sanity check. #}
+<div class="card mb-3">
+   <div class="card-header"><i class="fas fa-bolt me-1"></i> {{ __('Actions', 'monthlydigest') }}</div>
+   <div class="card-body d-flex flex-wrap gap-2">
+      <a class="btn btn-outline-primary" href="{{ preview_url }}?period={{ previous_period }}">
+         <i class="fas fa-eye me-1"></i> {{ __('Preview for me', 'monthlydigest') }} ({{ previous_period }})
+      </a>
+      {% if can_update %}
+         <a class="btn btn-outline-success"
+            href="{{ sendtest_url }}"
+            onclick="return confirm('{{ __('Send a test digest to your own email now?', 'monthlydigest') }}');">
+            <i class="fas fa-paper-plane me-1"></i> {{ __('Send test digest to me', 'monthlydigest') }}
+         </a>
+      {% endif %}
+      <span class="ms-auto small text-muted align-self-center">
+         <i class="fas fa-user-slash me-1"></i> {{ __('Opted-out users', 'monthlydigest') }}: <strong>{{ opted_out_count }}</strong>
+      </span>
+   </div>
+</div>
+
+{# Recent send log #}
+<div class="card">
+   <div class="card-header"><i class="fas fa-history me-1"></i> {{ __('Recent sends', 'monthlydigest') }}</div>
+   <div class="table-responsive">
+      <table class="table table-sm table-hover align-middle mb-0">
+         <thead class="table-light">
+            <tr>
+               <th>{{ __('Date', 'monthlydigest') }}</th>
+               <th>{{ __('Period', 'monthlydigest') }}</th>
+               <th>{{ __('User', 'monthlydigest') }}</th>
+               <th>{{ __('Status', 'monthlydigest') }}</th>
+               <th>{{ __('Recipient', 'monthlydigest') }}</th>
+               <th>{{ __('Subject', 'monthlydigest') }}</th>
+            </tr>
+         </thead>
+         <tbody>
+         {% if sent_log|length == 0 %}
+            <tr><td colspan="6" class="text-center text-muted">{{ __('No digests sent yet.', 'monthlydigest') }}</td></tr>
+         {% endif %}
+         {% for r in sent_log %}
+            <tr>
+               <td><small>{{ r.sent_at|raw }}</small></td>
+               <td>{{ r.period }}</td>
+               <td>#{{ r.users_id }}</td>
+               <td>
+                  {% set css = {'sent':'success', 'queued':'info', 'skipped':'secondary', 'failed':'danger'} %}
+                  <span class="badge bg-{{ css[r.status] ?? 'secondary' }}">{{ r.status }}</span>
+                  {% if r.error %}<small class="text-muted ms-1" title="{{ r.error }}">⚠</small>{% endif %}
+               </td>
+               <td><small>{{ r.recipient }}</small></td>
+               <td><small>{{ r.subject }}</small></td>
+            </tr>
+         {% endfor %}
+         </tbody>
+      </table>
+   </div>
+</div>

@@ -1,0 +1,219 @@
+{#
+ # MonthlyDigest plugin — Outlook-2021-LTSC-safe email HTML.
+ # GPLv2+
+ #
+ # Iteration 3 (v1.0.8 + VML button + softer palette):
+ #   - VML namespaces declared on <html> for v:roundrect to work in Word engine
+ #   - MSO conditional <o:OfficeDocumentSettings> for 96 DPI rendering
+ #   - Bulletproof rounded button via <v:roundrect> with anchorlock
+ #   - Softer colour palette (one shade lighter) — blue-500 header, -600 numbers
+ #}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="{{ locale|slice(0,2) }}"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:v="urn:schemas-microsoft-com:vml"
+      xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <meta name="x-apple-disable-message-reformatting">
+   <title>{{ __('Your monthly ticket digest', 'monthlydigest') }}</title>
+   <!--[if gte mso 9]>
+   <xml>
+      <o:OfficeDocumentSettings>
+         <o:AllowPNG/>
+         <o:PixelsPerInch>96</o:PixelsPerInch>
+      </o:OfficeDocumentSettings>
+   </xml>
+   <![endif]-->
+</head>
+<body bgcolor="#F4F6F8" style="margin:0;padding:0;background-color:#F4F6F8;">
+
+{# ============================================================
+ #  Outer wrapper — page background
+ # ============================================================ #}
+<table cellpadding="0" cellspacing="0" border="0" align="center" width="100%"
+       bgcolor="#F4F6F8" style="background-color:#F4F6F8;">
+   <tr>
+      <td align="center" valign="top" style="padding:24px 8px;">
+
+      {# ============================================================
+       #  Container — 600px white card
+       # ============================================================ #}
+      <table cellpadding="0" cellspacing="0" border="0" width="600"
+             bgcolor="#FFFFFF" style="background-color:#FFFFFF;border:1px solid #E5E7EB;">
+
+         {# === HEADER: softer blue (#3B82F6 = blue-500) === #}
+         <tr>
+            <td bgcolor="#3B82F6" align="center"
+                style="background-color:#3B82F6;padding:28px 24px 26px 24px;">
+               <font face="Segoe UI, Arial, sans-serif" color="#FFFFFF"
+                     style="font-family:'Segoe UI',Arial,sans-serif;font-size:22px;font-weight:bold;color:#FFFFFF;">
+                  {{ __('Your ticket summary', 'monthlydigest') }}
+               </font>
+               <br>
+               <font face="Segoe UI, Arial, sans-serif" color="#DBEAFE"
+                     style="font-family:'Segoe UI',Arial,sans-serif;font-size:14px;color:#DBEAFE;line-height:24px;">
+                  {{ period_label }}
+               </font>
+            </td>
+         </tr>
+
+         {# === GREETING + INTRO === #}
+         <tr>
+            <td align="left" style="padding:24px 28px 6px 28px;">
+               <font face="Segoe UI, Arial, sans-serif" color="#1F2937"
+                     style="font-family:'Segoe UI',Arial,sans-serif;font-size:15px;color:#1F2937;">
+                  {{ __('Hello', 'monthlydigest') }} {{ user.name }},
+               </font>
+            </td>
+         </tr>
+         <tr>
+            <td align="left" style="padding:8px 28px 18px 28px;">
+               <font face="Segoe UI, Arial, sans-serif" color="#6B7280"
+                     style="font-family:'Segoe UI',Arial,sans-serif;font-size:14px;color:#6B7280;line-height:21px;">
+                  {{ __('Here is a brief summary of your ticket activity for the last month.', 'monthlydigest') }}
+               </font>
+            </td>
+         </tr>
+
+         {# ============================================================
+          #  STATS CARDS — 2×2 grid with spacer cells
+          #  Softer text colors: -600 tone instead of -700
+          # ============================================================ #}
+         <tr>
+            <td style="padding:0 20px 8px 20px;">
+               <table cellpadding="0" cellspacing="0" border="0" width="100%">
+
+                  {# --- Row 1: Created | Solved --- #}
+                  <tr>
+                     {# CREATED — blue #}
+                     <td width="48%" bgcolor="#EFF6FF" align="center" valign="middle"
+                         style="background-color:#EFF6FF;border:1px solid #DBEAFE;padding:22px 8px 22px 8px;">
+                        <font face="Segoe UI, Arial, sans-serif" color="#2563EB"
+                              style="font-family:'Segoe UI',Arial,sans-serif;font-size:32px;font-weight:bold;color:#2563EB;line-height:38px;">
+                           {{ stats.created }}
+                        </font>
+                        <br>
+                        <font face="Segoe UI, Arial, sans-serif" color="#6B7280"
+                              style="font-family:'Segoe UI',Arial,sans-serif;font-size:13px;color:#6B7280;line-height:18px;">
+                           {{ __('Created', 'monthlydigest') }}
+                        </font>
+                     </td>
+                     <td width="4%" style="font-size:0;line-height:0;">&nbsp;</td>
+                     {# SOLVED — green #}
+                     <td width="48%" bgcolor="#ECFDF5" align="center" valign="middle"
+                         style="background-color:#ECFDF5;border:1px solid #D1FAE5;padding:22px 8px 22px 8px;">
+                        <font face="Segoe UI, Arial, sans-serif" color="#059669"
+                              style="font-family:'Segoe UI',Arial,sans-serif;font-size:32px;font-weight:bold;color:#059669;line-height:38px;">
+                           {{ stats.solved }}
+                        </font>
+                        <br>
+                        <font face="Segoe UI, Arial, sans-serif" color="#6B7280"
+                              style="font-family:'Segoe UI',Arial,sans-serif;font-size:13px;color:#6B7280;line-height:18px;">
+                           {{ __('Solved', 'monthlydigest') }}
+                        </font>
+                     </td>
+                  </tr>
+
+                  <tr>
+                     <td colspan="3" height="10" style="height:10px;font-size:0;line-height:0;">&nbsp;</td>
+                  </tr>
+
+                  {# --- Row 2: Closed | Still open --- #}
+                  <tr>
+                     {# CLOSED — violet #}
+                     <td width="48%" bgcolor="#F5F3FF" align="center" valign="middle"
+                         style="background-color:#F5F3FF;border:1px solid #EDE9FE;padding:22px 8px 22px 8px;">
+                        <font face="Segoe UI, Arial, sans-serif" color="#7C3AED"
+                              style="font-family:'Segoe UI',Arial,sans-serif;font-size:32px;font-weight:bold;color:#7C3AED;line-height:38px;">
+                           {{ stats.closed }}
+                        </font>
+                        <br>
+                        <font face="Segoe UI, Arial, sans-serif" color="#6B7280"
+                              style="font-family:'Segoe UI',Arial,sans-serif;font-size:13px;color:#6B7280;line-height:18px;">
+                           {{ __('Closed', 'monthlydigest') }}
+                        </font>
+                     </td>
+                     <td width="4%" style="font-size:0;line-height:0;">&nbsp;</td>
+                     {# STILL OPEN — amber (softer bg + softer text) #}
+                     <td width="48%" bgcolor="#FEFCE8" align="center" valign="middle"
+                         style="background-color:#FEFCE8;border:1px solid #FEF3C7;padding:22px 8px 22px 8px;">
+                        <font face="Segoe UI, Arial, sans-serif" color="#D97706"
+                              style="font-family:'Segoe UI',Arial,sans-serif;font-size:32px;font-weight:bold;color:#D97706;line-height:38px;">
+                           {{ stats.open }}
+                        </font>
+                        <br>
+                        <font face="Segoe UI, Arial, sans-serif" color="#6B7280"
+                              style="font-family:'Segoe UI',Arial,sans-serif;font-size:13px;color:#6B7280;line-height:18px;">
+                           {{ __('Still open', 'monthlydigest') }}
+                        </font>
+                     </td>
+                  </tr>
+
+               </table>
+            </td>
+         </tr>
+
+         {# ============================================================
+          #  BULLETPROOF BUTTON — VML for Outlook, fallback for others
+          #  VML gives proper rounded corners (arcsize) + click anywhere
+          # ============================================================ #}
+         {% if glpi_url %}
+         <tr>
+            <td align="center" style="padding:28px 28px 32px 28px;">
+               <!--[if mso]>
+               <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml"
+                            xmlns:w="urn:schemas-microsoft-com:office:word"
+                            href="{{ glpi_url }}/front/ticket.php"
+                            style="height:46px;v-text-anchor:middle;width:260px;"
+                            arcsize="15%" stroke="f" fillcolor="#3B82F6">
+                  <w:anchorlock/>
+                  <center style="color:#FFFFFF;font-family:'Segoe UI',Arial,sans-serif;font-size:14px;font-weight:bold;">
+                     {{ __('Open my tickets in GLPI', 'monthlydigest') }}
+                  </center>
+               </v:roundrect>
+               <![endif]-->
+               <!--[if !mso]><!-- -->
+               <a href="{{ glpi_url }}/front/ticket.php"
+                  style="background-color:#3B82F6;border-radius:6px;color:#FFFFFF;display:inline-block;
+                         font-family:'Segoe UI',Arial,sans-serif;font-size:14px;font-weight:bold;
+                         line-height:46px;text-align:center;text-decoration:none;width:260px;
+                         -webkit-text-size-adjust:none;mso-hide:all;">
+                  {{ __('Open my tickets in GLPI', 'monthlydigest') }}
+               </a>
+               <!--<![endif]-->
+            </td>
+         </tr>
+         {% endif %}
+
+         {# === FOOTER === #}
+         <tr>
+            <td bgcolor="#F9FAFB" align="left"
+                style="background-color:#F9FAFB;border-top:1px solid #E5E7EB;padding:18px 28px 18px 28px;">
+               <font face="Segoe UI, Arial, sans-serif" color="#9CA3AF"
+                     style="font-family:'Segoe UI',Arial,sans-serif;font-size:12px;color:#9CA3AF;line-height:18px;">
+                  {{ __('This is an automated message from your GLPI service desk.', 'monthlydigest') }}
+               </font>
+               {% if unsubscribe_url %}
+               <br>
+               <a href="{{ unsubscribe_url }}"
+                  style="color:#9CA3AF;text-decoration:underline;font-family:'Segoe UI',Arial,sans-serif;font-size:12px;">
+                  <font face="Segoe UI, Arial, sans-serif" color="#9CA3AF"
+                        style="font-family:'Segoe UI',Arial,sans-serif;font-size:12px;color:#9CA3AF;">
+                     {{ __('Unsubscribe from monthly digests', 'monthlydigest') }}
+                  </font>
+               </a>
+               {% endif %}
+            </td>
+         </tr>
+
+      </table>
+      {# End container #}
+
+      </td>
+   </tr>
+</table>
+
+</body>
+</html>
