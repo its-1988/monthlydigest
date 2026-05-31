@@ -6,7 +6,7 @@ Copyright (C) 2026 — GPLv2+
 -------------------------------------------------------------------------
  */
 
-define('PLUGIN_MONTHLYDIGEST_VERSION', '1.0.9');
+define('PLUGIN_MONTHLYDIGEST_VERSION', '1.1.0');
 define('PLUGIN_MONTHLYDIGEST_MIN_GLPI', '11.0.0');
 define('PLUGIN_MONTHLYDIGEST_MAX_GLPI', '11.1');
 

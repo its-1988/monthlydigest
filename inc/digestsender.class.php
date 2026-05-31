@@ -6,17 +6,22 @@ GPLv2+
 -------------------------------------------------------------------------
  */
 
-use Glpi\Application\View\TemplateRenderer;
-
 /**
  * Builds and dispatches the monthly digest email for one user via GLPI's
  * QueuedNotification (so SMTP, retries, DKIM and throttling are owned by
  * GLPI core).
  *
- *  - Renders HTML + plain-text bodies via Twig
+ *  - Resolves the right NotificationTemplate translation by user's language
+ *  - Substitutes ##tag## placeholders with our stats
  *  - Respects user opt-out
  *  - Respects test-mode (single hardcoded recipient)
  *  - Idempotent: skips if SentLog already has a row for (user, period)
+ *
+ * NOTE: we intentionally do NOT use NotificationEvent::raiseEvent because the
+ * per-user idempotency, opt-out and zero-skip logic doesn't map cleanly onto
+ * NotificationTarget's batch model. We borrow the storage (NotificationTemplate
+ * + translations) and the queueing pipeline (QueuedNotification → mailing cron)
+ * but keep the dispatch loop here.
  */
 class PluginMonthlydigestDigestSender
 {
@@ -99,30 +104,26 @@ class PluginMonthlydigestDigestSender
 
         $vars = $this->buildTemplateVars($user, $stats, $locale);
 
-        // Render bodies — load customisable templates from DB if present, else file
-        try {
-            $html = PluginMonthlydigestTemplate::renderByKey(
-                PluginMonthlydigestTemplate::KEY_HTML,
-                $vars
-            );
-            $text = PluginMonthlydigestTemplate::renderByKey(
-                PluginMonthlydigestTemplate::KEY_TEXT,
-                $vars
-            );
-        } catch (\Throwable $e) {
+        // Resolve the right translation row from the standard GLPI tables and
+        // substitute placeholders. If the translation is missing entirely we
+        // fall through to the shipped seed (see PluginMonthlydigestTemplate).
+        $translation = PluginMonthlydigestTemplate::getTranslation($locale);
+        if ($translation === null) {
             PluginMonthlydigestSentLog::record(
                 $usersId,
                 $period,
                 PluginMonthlydigestSentLog::STATUS_FAILED,
                 $recipient,
                 '',
-                'template error: ' . $e->getMessage()
+                'no notification template translation available'
             );
-            Toolbox::logError('MonthlyDigest: template render failed - ' . $e->getMessage());
+            Toolbox::logError('MonthlyDigest: NotificationTemplate row missing — re-install the plugin');
             return PluginMonthlydigestSentLog::STATUS_FAILED;
         }
 
-        $subject = $this->buildSubject($vars);
+        $html    = PluginMonthlydigestTemplate::substitute($translation['content_html'], $vars);
+        $text    = PluginMonthlydigestTemplate::substitute($translation['content_text'], $vars);
+        $subject = $this->buildSubject($vars, $translation['subject']);
         $sender  = self::resolveSender();
 
         // Queue via GLPI's QueuedNotification — picked up by core cron `queuednotification`.
@@ -138,7 +139,7 @@ class PluginMonthlydigestDigestSender
             'entities_id' => 0,
             'itemtype'    => 'User',
             'items_id'    => $usersId,
-            'event'       => 'monthly_digest',
+            'event'       => PluginMonthlydigestTemplate::EVENT,
             'mode'        => \Notification_NotificationTemplate::MODE_MAIL,
             'name'        => $subject,
             'sender'      => $sender['email'],
@@ -167,6 +168,8 @@ class PluginMonthlydigestDigestSender
 
     /**
      * Render preview-only (no queueing). Returns ['html', 'text', 'subject', 'recipient'].
+     *
+     * @return array{html:string, text:string, subject:string, recipient:string}
      */
     public function renderPreview(int $usersId, string $period): array
     {
@@ -180,55 +183,74 @@ class PluginMonthlydigestDigestSender
         $stats['month_label'] = PluginMonthlydigestStatsBuilder::rangeLabel($period, $monthsBack, $locale);
         $vars = $this->buildTemplateVars($user, $stats, $locale);
 
-        $html = PluginMonthlydigestTemplate::renderByKey(
-            PluginMonthlydigestTemplate::KEY_HTML,
-            $vars
-        );
-        $text = PluginMonthlydigestTemplate::renderByKey(
-            PluginMonthlydigestTemplate::KEY_TEXT,
-            $vars
-        );
+        $translation = PluginMonthlydigestTemplate::getTranslation($locale);
+        if ($translation === null) {
+            return ['html' => '', 'text' => '', 'subject' => '', 'recipient' => ''];
+        }
         return [
-            'html'      => $html,
-            'text'      => $text,
-            'subject'   => $this->buildSubject($vars),
+            'html'      => PluginMonthlydigestTemplate::substitute($translation['content_html'], $vars),
+            'text'      => PluginMonthlydigestTemplate::substitute($translation['content_text'], $vars),
+            'subject'   => $this->buildSubject($vars, $translation['subject']),
             'recipient' => $this->resolveRecipient($user),
         ];
     }
 
     /**
-     * @return array<string, mixed>
+     * Flat ##tag## variables map. Keys are tag names without the surrounding
+     * ## markers; PluginMonthlydigestTemplate::substitute() wraps them.
+     *
+     * @return array<string, scalar>
      */
     private function buildTemplateVars(User $user, array $stats, string $locale): array
     {
         global $CFG_GLPI;
         $token = PluginMonthlydigestUserPref::getOrCreateToken((int) $user->getID());
-        $unsubUrl = ($CFG_GLPI['url_base'] ?? '')
-            . '/plugins/monthlydigest/front/unsubscribe.php?token=' . urlencode($token);
+        $glpiUrl  = (string) ($CFG_GLPI['url_base'] ?? '');
+        $unsubUrl = $glpiUrl . '/plugins/monthlydigest/front/unsubscribe.php?token=' . urlencode($token);
+
+        $displayName = trim(($user->fields['firstname'] ?? '') . ' ' . ($user->fields['realname'] ?? ''));
+        if ($displayName === '') {
+            $displayName = (string) ($user->fields['name'] ?? '');
+        }
 
         return [
-            'user'         => [
-                'id'        => (int) $user->getID(),
-                'firstname' => (string) ($user->fields['firstname'] ?? ''),
-                'realname'  => (string) ($user->fields['realname'] ?? ''),
-                'name'      => trim(($user->fields['firstname'] ?? '') . ' ' . ($user->fields['realname'] ?? ''))
-                                ?: (string) $user->fields['name'],
-            ],
-            'stats'        => $stats,
-            'period_label' => $stats['month_label'],
-            'glpi_url'     => $CFG_GLPI['url_base'] ?? '',
-            'unsubscribe_url' => $unsubUrl,
-            'locale'       => $locale,
+            'user.id'           => (int) $user->getID(),
+            'user.name'         => $displayName,
+            'user.firstname'    => (string) ($user->fields['firstname'] ?? ''),
+            'user.realname'     => (string) ($user->fields['realname'] ?? ''),
+            'stats.created'     => (int) $stats['created'],
+            'stats.solved'      => (int) $stats['solved'],
+            'stats.closed'      => (int) $stats['closed'],
+            'stats.open'        => (int) $stats['open'],
+            'stats.period'      => (string) $stats['period'],
+            'stats.months_back' => (int) $stats['months_back'],
+            'period_label'      => (string) $stats['month_label'],
+            'glpi_url'          => $glpiUrl,
+            'cta_url'           => $glpiUrl . '/front/ticket.php',
+            'unsubscribe_url'   => $unsubUrl,
+            'lang'              => substr($locale, 0, 2),
+            'locale'            => $locale,
         ];
     }
 
-    private function buildSubject(array $vars): string
+    /**
+     * Subject precedence:
+     *   1. plugin config `subject_template` if set (admin override, %s = period)
+     *   2. NotificationTemplateTranslation.subject (##tag## substituted)
+     *   3. Hardcoded fallback
+     *
+     * @param array<string, scalar> $vars
+     */
+    private function buildSubject(array $vars, string $templateSubject): string
     {
-        $tpl = (string) ($this->config['subject_template'] ?? '');
-        if ($tpl === '') {
-            $tpl = __('Your tickets — %s', 'monthlydigest');
+        $override = trim((string) ($this->config['subject_template'] ?? ''));
+        if ($override !== '') {
+            return sprintf($override, (string) $vars['period_label']);
         }
-        return sprintf($tpl, $vars['period_label']);
+        if ($templateSubject !== '') {
+            return PluginMonthlydigestTemplate::substitute($templateSubject, $vars);
+        }
+        return sprintf(__('Your tickets — %s', 'monthlydigest'), (string) $vars['period_label']);
     }
 
     /**

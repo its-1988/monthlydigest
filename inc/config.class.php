@@ -76,21 +76,14 @@ class PluginMonthlydigestConfig extends CommonDBTM
         // hex string for us to embed.
         $csrf_token = Session::getNewCSRFToken();
 
-        // Templates list — for the "Email templates" card on the settings page
-        $templates = [];
-        foreach (PluginMonthlydigestTemplate::listKeys() as $key => $label) {
-            $templates[] = [
-                'key'           => $key,
-                'label'         => $label,
-                'is_customised' => PluginMonthlydigestTemplate::isCustomised($key),
-                'edit_url'      => Plugin::getWebDir('monthlydigest')
-                                   . '/front/template.form.php?key=' . urlencode($key),
-            ];
-        }
+        // Standard-GLPI deep-links for editing the email content.
+        // These point to GLPI core's Notification + NotificationTemplate forms
+        // — the canonical place where notification bodies live.
+        $notificationEditUrl = PluginMonthlydigestTemplate::editNotificationUrl();
+        $templateEditUrl     = PluginMonthlydigestTemplate::editTemplateUrl();
 
         TemplateRenderer::getInstance()->display('@monthlydigest/config.html.twig', [
             'config'           => $config,
-            'templates'        => $templates,
             // Post to OUR endpoint (not GLPI core's /front/config.form.php) so we
             // control the redirect back to the plugin's own settings page.
             // CSRF is still validated by Symfony's CheckCsrfListener because the
@@ -103,14 +96,18 @@ class PluginMonthlydigestConfig extends CommonDBTM
                 2 => __('2 months', 'monthlydigest'),
                 3 => __('3 months', 'monthlydigest'),
             ],
-            'sent_log'         => $log,
-            'opted_out_count'  => $optedOut,
-            'previous_period'  => PluginMonthlydigestStatsBuilder::previousMonth(),
-            'preview_url'      => Plugin::getWebDir('monthlydigest') . '/front/preview.php',
-            'sendtest_url'     => Plugin::getWebDir('monthlydigest')
-                                  . '/front/config.form.php?action=sendtest&confirm=1',
-            'can_update'       => Session::haveRight('config', UPDATE),
-            'plugin_version'   => PLUGIN_MONTHLYDIGEST_VERSION,
+            'sent_log'              => $log,
+            'opted_out_count'       => $optedOut,
+            'previous_period'       => PluginMonthlydigestStatsBuilder::previousMonth(),
+            'preview_url'           => Plugin::getWebDir('monthlydigest') . '/front/preview.php',
+            'sendtest_url'          => Plugin::getWebDir('monthlydigest')
+                                       . '/front/config.form.php?action=sendtest&confirm=1',
+            'notification_edit_url' => $notificationEditUrl,
+            'template_edit_url'     => $templateEditUrl,
+            'template_installed'    => $notificationEditUrl !== null && $templateEditUrl !== null,
+            'available_tags'        => PluginMonthlydigestTemplate::availableTags(),
+            'can_update'            => Session::haveRight('config', UPDATE),
+            'plugin_version'        => PLUGIN_MONTHLYDIGEST_VERSION,
         ]);
     }
 

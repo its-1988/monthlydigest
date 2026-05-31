@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MonthlyDigest 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-28 12:00+0000\n"
-"PO-Revision-Date: 2026-05-28 12:00+0000\n"
+"POT-Creation-Date: 2026-05-29 12:00+0000\n"
+"PO-Revision-Date: 2026-05-29 12:00+0000\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -39,20 +39,11 @@ msgstr "День месяца для отправки"
 msgid "1–28 (28 to avoid issues in February)"
 msgstr "1–28 (28 чтобы не было проблем с февралём)"
 
-msgid "Max users per cron run"
-msgstr "Макс. пользователей за один прогон cron"
+msgid "Subject template (override)"
+msgstr "Шаблон темы (переопределение)"
 
-msgid "Set via the CronTask \"param\" field. Useful for throttling SMTP."
-msgstr "Задаётся через поле «param» CronTask. Помогает не перегружать SMTP."
-
-msgid "Configure under Setup → Automatic Actions"
-msgstr "Настраивается в Настройка → Автоматические действия"
-
-msgid "Subject template"
-msgstr "Шаблон темы письма"
-
-msgid "Use %s as period placeholder. Empty = default \"Your tickets — Month YYYY\"."
-msgstr "Используй %s как плейсхолдер периода. Пусто = по умолчанию «Ваши заявки — Месяц ГГГГ»."
+msgid "Optional override of the NotificationTemplate subject. Use %s as period placeholder. Empty = use the subject from Setup → Notifications."
+msgstr "Опциональное переопределение темы из NotificationTemplate. Используй %s как плейсхолдер периода. Пусто = брать тему из Настройка → Уведомления."
 
 msgid "Audience"
 msgstr "Аудитория"
@@ -123,43 +114,6 @@ msgstr "Превью дайджеста"
 msgid "Test digest for %s: %s"
 msgstr "Тестовый дайджест за %s: %s"
 
-# === Email body ===
-msgid "Your monthly ticket digest"
-msgstr "Ваш ежемесячный дайджест по заявкам"
-
-msgid "Your ticket summary"
-msgstr "Сводка по вашим заявкам"
-
-msgid "Hello"
-msgstr "Здравствуйте"
-
-msgid "Here is a brief summary of your ticket activity for the last month."
-msgstr "Краткая сводка вашей активности по заявкам за прошлый месяц."
-
-msgid "Created"
-msgstr "Создано"
-
-msgid "Solved"
-msgstr "Решено"
-
-msgid "Closed"
-msgstr "Закрыто"
-
-msgid "Still open"
-msgstr "Ещё открыто"
-
-msgid "Open my tickets in GLPI"
-msgstr "Открыть мои заявки в GLPI"
-
-msgid "This is an automated message from your GLPI service desk."
-msgstr "Это автоматическое сообщение от вашей службы поддержки GLPI."
-
-msgid "Unsubscribe from monthly digests"
-msgstr "Отписаться от ежемесячных дайджестов"
-
-msgid "Unsubscribe"
-msgstr "Отписаться"
-
 msgid "Unsubscribed"
 msgstr "Вы отписаны"
 
@@ -205,78 +159,46 @@ msgstr "2 месяца"
 msgid "3 months"
 msgstr "3 месяца"
 
-# === Template editor ===
+# === Карточка «Шаблоны писем» (ссылки в штатный GLPI Notification UI) ===
 msgid "Email templates"
 msgstr "Шаблоны писем"
 
-msgid "Customise the email bodies sent to recipients. Empty body resets to the shipped default. Twig syntax is validated before save."
-msgstr "Настройка тел писем, отправляемых получателям. Пустое тело сбрасывает шаблон на дефолт из файла. Синтаксис Twig проверяется перед сохранением."
+msgid "Installed"
+msgstr "Установлено"
 
-msgid "HTML body"
-msgstr "HTML-тело"
+msgid "Missing"
+msgstr "Отсутствует"
 
-msgid "Plain-text body"
-msgstr "Plain-text тело"
+msgid "NotificationTemplate is installed in GLPI"
+msgstr "NotificationTemplate установлен в GLPI"
 
-msgid "Customised"
-msgstr "Изменён"
+msgid "Notification row missing — try reinstalling the plugin"
+msgstr "Запись Notification не найдена — попробуй переустановить плагин"
 
-msgid "Default (file)"
-msgstr "Дефолт (из файла)"
+msgid "Email subject + HTML + plain-text bodies are stored in GLPI's standard notification tables and edited via the native GLPI UI. Each language (en_GB, ru_RU) has its own translation row — the user's GLPI language picks the right one."
+msgstr "Тема + HTML- и plain-text-тела хранятся в стандартных таблицах уведомлений GLPI и редактируются через нативный UI. У каждого языка (en_GB, ru_RU) своя запись перевода — язык пользователя выбирает нужную."
 
-msgid "Edit"
-msgstr "Редактировать"
+msgid "Edit notification template (Setup → Notifications)"
+msgstr "Редактировать шаблон уведомления (Настройка → Уведомления)"
 
-msgid "Template body"
-msgstr "Тело шаблона"
+msgid "Edit Notification binding"
+msgstr "Редактировать привязку Notification"
 
-msgid "Twig syntax. Leave empty and save to reset to the shipped default."
-msgstr "Синтаксис Twig. Оставь пустым и сохрани — сбросится на дефолт из файла."
+msgid "The Notification entry could not be located. Disable and re-enable the plugin to re-run the installer."
+msgstr "Запись Notification не найдена. Отключи и включи плагин снова чтобы пере-запустить установщик."
 
-msgid "Back to settings"
-msgstr "Назад в настройки"
+# === Справка по тегам ===
+msgid "Available tags"
+msgstr "Доступные теги"
 
-msgid "A custom body is stored in the database."
-msgstr "Кастомное тело хранится в базе данных."
+msgid "These ##tag## placeholders are replaced when each digest is sent. Use them inside the subject, HTML body or plain-text body of the NotificationTemplate."
+msgstr "Эти ##tag## плейсхолдеры подставляются при отправке каждого дайджеста. Используй их в теме, HTML-теле или plain-text-теле NotificationTemplate."
 
-msgid "Reads the file shipped with the plugin."
-msgstr "Читает файл из поставки плагина."
-
-msgid "Twig syntax error"
-msgstr "Ошибка синтаксиса Twig"
-
-msgid "Reset to default"
-msgstr "Сбросить на дефолт"
-
-msgid "Reset this template to its shipped default? Your customisations will be lost."
-msgstr "Сбросить этот шаблон на дефолт из файла? Все правки будут потеряны."
-
-msgid "Preview"
-msgstr "Превью"
-
-msgid "Available variables"
-msgstr "Доступные переменные"
-
-msgid "Variable"
-msgstr "Переменная"
+msgid "Tag"
+msgstr "Тег"
 
 msgid "Description"
 msgstr "Описание"
-
-msgid "Template saved."
-msgstr "Шаблон сохранён."
-
-msgid "Template reset to shipped default."
-msgstr "Шаблон сброшен на дефолт из файла."
-
-msgid "Failed to save template."
-msgstr "Не удалось сохранить шаблон."
-
-msgid "Template not saved due to syntax error."
-msgstr "Шаблон не сохранён — ошибка синтаксиса."
-
-msgid "Unknown template key."
-msgstr "Неизвестный ключ шаблона."
 
 msgid "Recipient user id"
 msgstr "ID пользователя-получателя"
@@ -314,11 +236,14 @@ msgstr "Размер окна (1, 2 или 3 месяца)"
 msgid "Configured base URL of the GLPI instance"
 msgstr "Настроенный базовый URL GLPI-инстанса"
 
+msgid "\"My tickets\" deep link (glpi_url + /front/ticket.php)"
+msgstr "Прямая ссылка на «Мои заявки» (glpi_url + /front/ticket.php)"
+
 msgid "Tokenised opt-out URL for the recipient"
 msgstr "Уникальный URL отписки для получателя"
 
-msgid "User's GLPI language code (e.g. \"ru_RU\")"
-msgstr "Языковой код пользователя в GLPI (напр. «ru_RU»)"
+msgid "User's GLPI language code, short form (e.g. \"ru\")"
+msgstr "Краткий код языка пользователя (напр. «ru»)"
 
-msgid "Translate a string using the plugin's message catalogue"
-msgstr "Перевод строки через каталог сообщений плагина"
+msgid "User's full GLPI language code (e.g. \"ru_RU\")"
+msgstr "Полный языковой код пользователя в GLPI (напр. «ru_RU»)"

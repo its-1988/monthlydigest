@@ -14,18 +14,25 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Manually trigger the digest run from CLI.
  *
- *   php bin/console monthlydigest:send
- *   php bin/console monthlydigest:send --period=2026-05
- *   php bin/console monthlydigest:send --user=42 --dry-run
- *   php bin/console monthlydigest:send --force      # ignore today != send_day_of_month
+ *   php bin/console plugins:monthlydigest:send
+ *   php bin/console plugins:monthlydigest:send --period=2026-05
+ *   php bin/console plugins:monthlydigest:send --user=42 --dry-run
+ *   php bin/console plugins:monthlydigest:send --force   # ignore today != send_day_of_month
+ *
+ * GLPI 11's CommandLoader requires plugin commands to live in the
+ * `plugins:<plugin_key>:` namespace — the expected regex is
+ * /^plugins:monthlydigest(:[^:]+)+$/ (src/Glpi/Console/CommandLoader.php).
+ * A command outside that namespace is rejected (not registered) AND logs a
+ * WARNING on every console run. We set the name via setName() in configure()
+ * — matching GLPI core's own commands — instead of the deprecated
+ * `protected static $defaultName` Symfony property.
  */
 class PluginMonthlydigestSendCommand extends Command
 {
-    protected static $defaultName = 'monthlydigest:send';
-
     protected function configure(): void
     {
         $this
+            ->setName('plugins:monthlydigest:send')
             ->setDescription('Send the monthly ticket digest to active users')
             ->addOption('period', 'p', InputOption::VALUE_REQUIRED, 'Period YYYY-MM (default: previous month)')
             ->addOption('user',   'u', InputOption::VALUE_REQUIRED, 'Single user id (default: all eligible)')

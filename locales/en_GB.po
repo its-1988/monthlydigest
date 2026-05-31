@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MonthlyDigest 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-28 12:00+0000\n"
-"PO-Revision-Date: 2026-05-28 12:00+0000\n"
+"POT-Creation-Date: 2026-05-29 12:00+0000\n"
+"PO-Revision-Date: 2026-05-29 12:00+0000\n"
 "Last-Translator: \n"
 "Language-Team: English (United Kingdom)\n"
 "Language: en_GB\n"
@@ -39,20 +39,11 @@ msgstr "Send day of month"
 msgid "1–28 (28 to avoid issues in February)"
 msgstr "1–28 (28 to avoid issues in February)"
 
-msgid "Max users per cron run"
-msgstr "Max users per cron run"
+msgid "Subject template (override)"
+msgstr "Subject template (override)"
 
-msgid "Set via the CronTask \"param\" field. Useful for throttling SMTP."
-msgstr "Set via the CronTask \"param\" field. Useful for throttling SMTP."
-
-msgid "Configure under Setup → Automatic Actions"
-msgstr "Configure under Setup → Automatic Actions"
-
-msgid "Subject template"
-msgstr "Subject template"
-
-msgid "Use %s as period placeholder. Empty = default \"Your tickets — Month YYYY\"."
-msgstr "Use %s as period placeholder. Empty = default \"Your tickets — Month YYYY\"."
+msgid "Optional override of the NotificationTemplate subject. Use %s as period placeholder. Empty = use the subject from Setup → Notifications."
+msgstr "Optional override of the NotificationTemplate subject. Use %s as period placeholder. Empty = use the subject from Setup → Notifications."
 
 msgid "Audience"
 msgstr "Audience"
@@ -123,43 +114,6 @@ msgstr "Digest preview"
 msgid "Test digest for %s: %s"
 msgstr "Test digest for %s: %s"
 
-# === Email body ===
-msgid "Your monthly ticket digest"
-msgstr "Your monthly ticket digest"
-
-msgid "Your ticket summary"
-msgstr "Your ticket summary"
-
-msgid "Hello"
-msgstr "Hello"
-
-msgid "Here is a brief summary of your ticket activity for the last month."
-msgstr "Here is a brief summary of your ticket activity for the last month."
-
-msgid "Created"
-msgstr "Created"
-
-msgid "Solved"
-msgstr "Solved"
-
-msgid "Closed"
-msgstr "Closed"
-
-msgid "Still open"
-msgstr "Still open"
-
-msgid "Open my tickets in GLPI"
-msgstr "Open my tickets in GLPI"
-
-msgid "This is an automated message from your GLPI service desk."
-msgstr "This is an automated message from your GLPI service desk."
-
-msgid "Unsubscribe from monthly digests"
-msgstr "Unsubscribe from monthly digests"
-
-msgid "Unsubscribe"
-msgstr "Unsubscribe"
-
 msgid "Unsubscribed"
 msgstr "Unsubscribed"
 
@@ -205,78 +159,46 @@ msgstr "2 months"
 msgid "3 months"
 msgstr "3 months"
 
-# === Template editor ===
+# === Email templates card (links into GLPI's standard Notification UI) ===
 msgid "Email templates"
 msgstr "Email templates"
 
-msgid "Customise the email bodies sent to recipients. Empty body resets to the shipped default. Twig syntax is validated before save."
-msgstr "Customise the email bodies sent to recipients. Empty body resets to the shipped default. Twig syntax is validated before save."
+msgid "Installed"
+msgstr "Installed"
 
-msgid "HTML body"
-msgstr "HTML body"
+msgid "Missing"
+msgstr "Missing"
 
-msgid "Plain-text body"
-msgstr "Plain-text body"
+msgid "NotificationTemplate is installed in GLPI"
+msgstr "NotificationTemplate is installed in GLPI"
 
-msgid "Customised"
-msgstr "Customised"
+msgid "Notification row missing — try reinstalling the plugin"
+msgstr "Notification row missing — try reinstalling the plugin"
 
-msgid "Default (file)"
-msgstr "Default (file)"
+msgid "Email subject + HTML + plain-text bodies are stored in GLPI's standard notification tables and edited via the native GLPI UI. Each language (en_GB, ru_RU) has its own translation row — the user's GLPI language picks the right one."
+msgstr "Email subject + HTML + plain-text bodies are stored in GLPI's standard notification tables and edited via the native GLPI UI. Each language (en_GB, ru_RU) has its own translation row — the user's GLPI language picks the right one."
 
-msgid "Edit"
-msgstr "Edit"
+msgid "Edit notification template (Setup → Notifications)"
+msgstr "Edit notification template (Setup → Notifications)"
 
-msgid "Template body"
-msgstr "Template body"
+msgid "Edit Notification binding"
+msgstr "Edit Notification binding"
 
-msgid "Twig syntax. Leave empty and save to reset to the shipped default."
-msgstr "Twig syntax. Leave empty and save to reset to the shipped default."
+msgid "The Notification entry could not be located. Disable and re-enable the plugin to re-run the installer."
+msgstr "The Notification entry could not be located. Disable and re-enable the plugin to re-run the installer."
 
-msgid "Back to settings"
-msgstr "Back to settings"
+# === Available tags reference ===
+msgid "Available tags"
+msgstr "Available tags"
 
-msgid "A custom body is stored in the database."
-msgstr "A custom body is stored in the database."
+msgid "These ##tag## placeholders are replaced when each digest is sent. Use them inside the subject, HTML body or plain-text body of the NotificationTemplate."
+msgstr "These ##tag## placeholders are replaced when each digest is sent. Use them inside the subject, HTML body or plain-text body of the NotificationTemplate."
 
-msgid "Reads the file shipped with the plugin."
-msgstr "Reads the file shipped with the plugin."
-
-msgid "Twig syntax error"
-msgstr "Twig syntax error"
-
-msgid "Reset to default"
-msgstr "Reset to default"
-
-msgid "Reset this template to its shipped default? Your customisations will be lost."
-msgstr "Reset this template to its shipped default? Your customisations will be lost."
-
-msgid "Preview"
-msgstr "Preview"
-
-msgid "Available variables"
-msgstr "Available variables"
-
-msgid "Variable"
-msgstr "Variable"
+msgid "Tag"
+msgstr "Tag"
 
 msgid "Description"
 msgstr "Description"
-
-msgid "Template saved."
-msgstr "Template saved."
-
-msgid "Template reset to shipped default."
-msgstr "Template reset to shipped default."
-
-msgid "Failed to save template."
-msgstr "Failed to save template."
-
-msgid "Template not saved due to syntax error."
-msgstr "Template not saved due to syntax error."
-
-msgid "Unknown template key."
-msgstr "Unknown template key."
 
 msgid "Recipient user id"
 msgstr "Recipient user id"
@@ -314,11 +236,14 @@ msgstr "Window size (1, 2 or 3 months)"
 msgid "Configured base URL of the GLPI instance"
 msgstr "Configured base URL of the GLPI instance"
 
+msgid "\"My tickets\" deep link (glpi_url + /front/ticket.php)"
+msgstr "\"My tickets\" deep link (glpi_url + /front/ticket.php)"
+
 msgid "Tokenised opt-out URL for the recipient"
 msgstr "Tokenised opt-out URL for the recipient"
 
-msgid "User's GLPI language code (e.g. \"ru_RU\")"
-msgstr "User's GLPI language code (e.g. \"en_GB\")"
+msgid "User's GLPI language code, short form (e.g. \"ru\")"
+msgstr "User's GLPI language code, short form (e.g. \"en\")"
 
-msgid "Translate a string using the plugin's message catalogue"
-msgstr "Translate a string using the plugin's message catalogue"
+msgid "User's full GLPI language code (e.g. \"ru_RU\")"
+msgstr "User's full GLPI language code (e.g. \"en_GB\")"

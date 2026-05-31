@@ -2,12 +2,14 @@
  # MonthlyDigest plugin — Standalone settings form.
  # GPLv2+
  #
- # The form posts to the STANDARD GLPI Config endpoint (/front/config.form.php).
- # Config::prepareInputForUpdate (11.0.7 lines 174-189) recognises
- # `config_context = "plugin:monthlydigest"` and routes the input to
- # setConfigurationValues() automatically. CSRF is validated by the Symfony
- # `CheckCsrfListener` and matches because the token in the form is the
- # canonical csrf_token() from the same session.
+ # The form posts to OUR /front/config.update.php endpoint so we control the
+ # redirect back to the plugin's own settings page. CSRF is still validated by
+ # Symfony's CheckCsrfListener because the PHP-generated csrf_token_value
+ # lives in $_SESSION['glpicsrftokens'].
+ #
+ # Email subject + bodies live in GLPI's native NotificationTemplate (since
+ # v1.1.0). This page only links to the standard Setup → Notifications form
+ # and lists the available ##tag## placeholders.
  #}
 
 {% macro select(name, choices, current) %}
@@ -61,8 +63,8 @@
             </div>
          </div>
          <div class="row mb-3">
-            <label class="col-sm-4 col-form-label">{{ __('Subject template', 'monthlydigest') }}
-               <div class="form-text">{{ __('Use %s as period placeholder. Empty = default "Your tickets — Month YYYY".', 'monthlydigest') }}</div>
+            <label class="col-sm-4 col-form-label">{{ __('Subject template (override)', 'monthlydigest') }}
+               <div class="form-text">{{ __('Optional override of the NotificationTemplate subject. Use %s as period placeholder. Empty = use the subject from Setup → Notifications.', 'monthlydigest') }}</div>
             </label>
             <div class="col-sm-8">
                <input type="text" name="subject_template" class="form-control" placeholder="Your tickets — %s" value="{{ config.subject_template }}">
@@ -105,39 +107,74 @@
    </div>
 </form>
 
-{# === Email templates editor === #}
+{# === Email templates — managed by GLPI core === #}
 <div class="card mb-3">
-   <div class="card-header">
-      <i class="fas fa-mail-bulk me-1"></i> {{ __('Email templates', 'monthlydigest') }}
+   <div class="card-header d-flex align-items-center">
+      <i class="fas fa-mail-bulk me-2"></i>
+      <strong>{{ __('Email templates', 'monthlydigest') }}</strong>
+      {% if template_installed %}
+         <span class="badge bg-success ms-2"
+               title="{{ __('NotificationTemplate is installed in GLPI', 'monthlydigest') }}">
+            <i class="fas fa-check"></i> {{ __('Installed', 'monthlydigest') }}
+         </span>
+      {% else %}
+         <span class="badge bg-danger ms-2"
+               title="{{ __('Notification row missing — try reinstalling the plugin', 'monthlydigest') }}">
+            <i class="fas fa-exclamation-triangle"></i> {{ __('Missing', 'monthlydigest') }}
+         </span>
+      {% endif %}
    </div>
    <div class="card-body">
       <p class="text-muted small mb-3">
-         {{ __('Customise the email bodies sent to recipients. Empty body resets to the shipped default. Twig syntax is validated before save.', 'monthlydigest') }}
+         {{ __('Email subject + HTML + plain-text bodies are stored in GLPI\'s standard notification tables and edited via the native GLPI UI. Each language (en_GB, ru_RU) has its own translation row — the user\'s GLPI language picks the right one.', 'monthlydigest') }}
       </p>
-      <table class="table table-sm align-middle mb-0">
-         <tbody>
-            {% for t in templates %}
+
+      {% if template_installed %}
+         <div class="d-flex flex-wrap gap-2">
+            <a class="btn btn-outline-primary" href="{{ template_edit_url }}">
+               <i class="fas fa-edit me-1"></i>
+               {{ __('Edit notification template (Setup → Notifications)', 'monthlydigest') }}
+            </a>
+            <a class="btn btn-outline-secondary" href="{{ notification_edit_url }}">
+               <i class="fas fa-bell me-1"></i>
+               {{ __('Edit Notification binding', 'monthlydigest') }}
+            </a>
+         </div>
+      {% else %}
+         <div class="alert alert-danger mb-0">
+            {{ __('The Notification entry could not be located. Disable and re-enable the plugin to re-run the installer.', 'monthlydigest') }}
+         </div>
+      {% endif %}
+   </div>
+</div>
+
+{# === Available tags reference === #}
+<div class="card mb-3">
+   <div class="card-header">
+      <i class="fas fa-list-ul me-1"></i> {{ __('Available tags', 'monthlydigest') }}
+   </div>
+   <div class="card-body">
+      <p class="text-muted small mb-2">
+         {{ __('These ##tag## placeholders are replaced when each digest is sent. Use them inside the subject, HTML body or plain-text body of the NotificationTemplate.', 'monthlydigest') }}
+      </p>
+      <div class="table-responsive">
+         <table class="table table-sm table-striped mb-0">
+            <thead>
                <tr>
-                  <td>
-                     <i class="ti ti-mail-code me-2"></i>
-                     <strong>{{ t.label }}</strong>
-                  </td>
-                  <td>
-                     {% if t.is_customised %}
-                        <span class="badge bg-warning">{{ __('Customised', 'monthlydigest') }}</span>
-                     {% else %}
-                        <span class="badge bg-secondary">{{ __('Default (file)', 'monthlydigest') }}</span>
-                     {% endif %}
-                  </td>
-                  <td class="text-end">
-                     <a class="btn btn-sm btn-outline-primary" href="{{ t.edit_url }}">
-                        <i class="fas fa-edit me-1"></i> {{ _x('button', 'Edit') }}
-                     </a>
-                  </td>
+                  <th style="width:30%">{{ __('Tag', 'monthlydigest') }}</th>
+                  <th>{{ __('Description', 'monthlydigest') }}</th>
                </tr>
-            {% endfor %}
-         </tbody>
-      </table>
+            </thead>
+            <tbody>
+               {% for t in available_tags %}
+                  <tr>
+                     <td class="font-monospace small">##{{ t.name }}##</td>
+                     <td>{{ t.description }}</td>
+                  </tr>
+               {% endfor %}
+            </tbody>
+         </table>
+      </div>
    </div>
 </div>
 

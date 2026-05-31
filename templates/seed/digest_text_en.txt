@@ -1,0 +1,18 @@
+Your ticket summary — ##period_label##
+==============================================
+
+Hello ##user.name##,
+
+Here is a brief summary of your ticket activity for the last month.
+
+  Created:    ##stats.created##
+  Solved:     ##stats.solved##
+  Closed:     ##stats.closed##
+  Still open: ##stats.open##
+
+Open my tickets in GLPI:
+  ##cta_url##
+
+--
+This is an automated message from your GLPI service desk.
+Unsubscribe: ##unsubscribe_url##
